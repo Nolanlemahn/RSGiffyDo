@@ -10,7 +10,7 @@ function bad_gif
   /usr/bin/osascript <<-EOF
     tell application "System Events"
       activate
-      display dialog "THAT WASN'T ACTUALLY A .gif FILE! Try again."\
+      display dialog "THAT WASN'T ACTUALLY A .gif FILE!\n\nTry again."\
       default button 1 buttons {"Sorry!"}
 
       if button returned of result is "Sorry!" then
@@ -25,7 +25,7 @@ if [ $# -eq 0 ]; then
 RESULT=`/usr/bin/osascript <<-EOF
   tell application "System Events"
     activate
-    display dialog "THAT IS NOT HOW THIS WORKS. Please drag a *.gif file into this applet."\
+    display dialog "THAT IS NOT HOW THIS WORKS.\n\nPlease drag a *.gif file into this applet."\
     default button 1 buttons {"Oh, okay"}
 
     if button returned of result is "Oh, okay" then
@@ -39,7 +39,7 @@ RESULT=`/usr/bin/osascript <<-EOF
   tell application "System Events"
     activate
     display dialog "You are about to replace the RuneScape NXT loading image.\
-    Are you sure you want to do that?"\
+    \n\nAre you sure you want to do that?"\
     default button 2 buttons {"Go ahead!", "WAIT NO STOP!"}
     if button returned of result is "Go ahead!" then
       return 1
@@ -61,7 +61,7 @@ if [ "$RESULT" -eq 0 ]; then
 else
   echo "Half-assing file verification..."
   # Do you really think I'm going to check the actual binary data itself?
-  if [ ${UINPUT: -4} == ".gif" ] || [ ${UINPUT: -4} == ".gif" ]; then
+  if [ ${UINPUT: -4} == ".gif" ] || [ ${UINPUT: -4} == ".GIF" ]; then
     echo "Hopefully definitely a .gif file..."
     eval rm "$TARGET$TFILE" #"~/Jagex/launcher/splash6.gif"
     eval cp "\"$UINPUT\" \"$TARGET\"\"$TFILE\""
