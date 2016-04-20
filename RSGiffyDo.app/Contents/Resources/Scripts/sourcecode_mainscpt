@@ -1,0 +1,1 @@
+on open filelist	repeat with i in filelist		set myPath to (quoted form of ((the POSIX path of (path to me)) & "main"))		set gifTarget to (quoted form of (POSIX path of i))		do shell script myPath & " " & gifTarget		return #LOL	end repeatend openset myPath to (quoted form of ((the POSIX path of (path to me)) & "main"))do shell script myPath
