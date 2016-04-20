@@ -3,8 +3,7 @@ TARGET="$HOME/Jagex/launcher"
 TFILE="/splash6.gif"
 RESULT=0
 
-# START APPLESCRIPT NONSENSE
-function bad_gif
+function bad_gif # Helper for telling the user that the file wasn't a .gif
 {
   if [ $# -eq 0 ]; then
   /usr/bin/osascript <<-EOF
@@ -21,6 +20,29 @@ EOF
 fi
 }
 
+function celebrate # Helper for telling the user that we just finished
+{
+  if [ $# -eq 0 ]; then
+  /usr/bin/osascript <<-EOF
+    tell application "System Events"
+      activate
+      display dialog "We did it! You (should) have a new loading screen!"\
+      default button 1 buttons {"Yay!"}
+
+      if button returned of result is "Yay!" then
+        return
+      end if
+    end tell
+EOF
+fi
+}
+
+
+#########################
+## RUNTIME STARTS HERE ##
+#########################
+
+# User gave us no arguments whatsoever
 if [ $# -eq 0 ]; then
 RESULT=`/usr/bin/osascript <<-EOF
   tell application "System Events"
@@ -33,7 +55,8 @@ RESULT=`/usr/bin/osascript <<-EOF
     end if
   end tell
 EOF`
-  # The user is obeying me! Save his choice!
+
+# Confirmation of destructive action
 else
 RESULT=`/usr/bin/osascript <<-EOF
   tell application "System Events"
@@ -49,24 +72,27 @@ RESULT=`/usr/bin/osascript <<-EOF
     end tell
 EOF`
 fi
-# END APPLESCRIPT NONSENSE
 
-CANRUN=0
-UINPUT="$1"
+# RESULT is used to determine whether we should run our main functionality.
+# It is set in the above osascript calls. Hopefully it's still 0, or was set
+# to 1.
+
+UINPUT="$1" # Save the first argument as a variable
 echo $UINPUT
 
-if [ "$RESULT" -eq 0 ]; then
+if [ "$RESULT" -eq 0 ]; then # Aaaaaand it's still 0. Abort!
   echo "Cancel..."
   exit
 else
-  echo "Half-assing file verification..."
+  echo "Lazily going about file verification..."
   # Do you really think I'm going to check the actual binary data itself?
   if [ ${UINPUT: -4} == ".gif" ] || [ ${UINPUT: -4} == ".GIF" ]; then
     echo "Hopefully definitely a .gif file..."
     eval rm "$TARGET$TFILE" #"~/Jagex/launcher/splash6.gif"
     eval cp "\"$UINPUT\" \"$TARGET\"\"$TFILE\""
+    celebrate #see top of file, notification of success
   else
-    bad_gif #see top of file, local function call
+    bad_gif #see top of file, wrong file extension error message
   fi
 fi
 
