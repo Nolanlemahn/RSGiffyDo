@@ -86,14 +86,14 @@ if [ "$RESULT" -eq 0 ]; then # Aaaaaand it's still 0. Abort!
 else
   echo "Lazily going about file verification..."
   # Do you really think I'm going to check the actual binary data itself?
-  if [ ${UINPUT: -4} == ".gif" ] || [ ${UINPUT: -4} == ".GIF" ]; then
+if [ ${UINPUT: -4} == ".gif" ] || [ ${UINPUT: -4} == ".GIF" ]; then
     echo "Hopefully definitely a .gif file..."
-    eval rm "$TARGET$TFILE" #"~/Jagex/launcher/splash6.gif"
+    eval mv "~/Jagex/launcher/splash6.gif" "~/Jagex/launcher/splash6.gif.orig" && eval mv "$TARGET$TFILE" #"~/Jagex/launcher/splash6.gif"
     eval cp "\"$UINPUT\" \"$TARGET\"\"$TFILE\""
     celebrate #see top of file, notification of success
-  else
+else
     bad_gif #see top of file, wrong file extension error message
-  fi
+fi
 fi
 
 echo "Done..."
